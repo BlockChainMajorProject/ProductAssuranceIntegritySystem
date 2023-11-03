@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration and Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Registration and Login</h1>
+    
+    <!-- Consumer button to redirect to page1 -->
+    <button id="consumerButton">Continue as a Consumer</button>
+    
+    <h2>Select User Type:</h2>
+    <form id="userTypeForm">
+        <div class="form-group">
+            <input type="checkbox" id="manufacturerCheckbox" value="manufacturer"> Manufacturer
+            <input type="checkbox" id="sellerCheckbox" value="seller"> Seller
+        </div>
+    </form>
+    
+    <h2>Registration</h2>
+    <form id="registrationForm">
+        <div class="form-group">
+            <input type="text" id="username" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" id="registerBtn">Register</button>
+        </div>
+    </form>
+
+    <h2>Login</h2>
+    <form id="loginForm">
+        <div class="form-group">
+            <input type="text" id="loginUsername" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <input type="password" id="loginPassword" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" id="loginBtn">Login</button>
+        </div>
+    </form>
+
+    <div id="message" style="color: red;"></div>
+
+    <script>
+        const registrationForm = document.getElementById("registrationForm");
+        const manufacturerCheckbox = document.getElementById("manufacturerCheckbox");
+        const sellerCheckbox = document.getElementById("sellerCheckbox");
+        const consumerButton = document.getElementById("consumerButton");
+        const loginForm = document.getElementById("loginForm");
+        const message = document.getElementById("message");
+
+        const users = [
+            { type: "manufacturer", username: "apple", password: "apple1" },
+            { type: "seller", username: "seller1", password: "seller1" }
+        ];
+
+        // Redirect to page1 when the "Consumer" button is clicked
+        consumerButton.addEventListener("click", function() {
+            window.location.href = "consumer.html";
+        });
+
+        registrationForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (manufacturerCheckbox.checked) {
+                // Handle manufacturer registration
+                message.textContent = "Manufacturer registration successful!";
+                // Redirect to the manufacturer's page (manufacturer.html)
+                window.location.href = "manufacturer.html";
+            } else if (sellerCheckbox.checked) {
+                // Handle seller registration
+                message.textContent = "Seller registration successful!";
+                // Redirect to the seller's page (supplier.html)
+                window.location.href = "supplier.html";
+            } else {
+                message.textContent = "Please select a user type (manufacturer or seller).";
+            }
+        });
+
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+            const selectedType = manufacturerCheckbox.checked ? "manufacturer" : "seller";
+
+            const user = users.find(u => u.type === selectedType && u.username === username && u.password === password);
+
+            if (user) {
+                // Successful login
+                if (selectedType === "manufacturer") {
+                    // Redirect to the manufacturer's page (manufacturer.html)
+                    window.location.href = "manufacturer.html";
+                } else {
+                    // Redirect to the seller's page (supplier.html)
+                    window.location.href = "supplier.html";
+                }
+            } else {
+                message.textContent = "Invalid username or password.";
+            }
+        });
+    </script>
+</body>
+</html>
