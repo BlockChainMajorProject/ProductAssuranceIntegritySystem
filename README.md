@@ -1,4 +1,4 @@
-# Fake Product Identification using Blockchain
+
 
 ## Packages Required:-
 - Truffle v5.6.7 (core: 5.6.7)
