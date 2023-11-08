@@ -99,6 +99,8 @@
             event.preventDefault();
             const username = document.getElementById("loginUsername").value;
             const password = document.getElementById("loginPassword").value;
+            if (manufacturerCheckbox.checked || sellerCheckbox.checked) {
+          
             const selectedType = manufacturerCheckbox.checked ? "manufacturer" : "seller";
 
             const user = users.find(u => u.type === selectedType && u.username === username && u.password === password);
@@ -115,6 +117,10 @@
             } else {
                 message.textContent = "Invalid username or password.";
             }
+        }
+        else{
+            message.textContent = "Please select a user type (manufacturer or seller).";
+        }
         });
     </script>
 </body>
