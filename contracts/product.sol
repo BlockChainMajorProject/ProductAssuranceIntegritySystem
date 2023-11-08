@@ -45,17 +45,6 @@ contract product {
         productsManufactured[_productSN] = _manufactuerID;
     }
 
-
-   
-
-    //SELL Product
-
-    function manufacturerSellProduct(bytes32 _productSN, bytes32 _sellerCode) public{
-        productsWithSeller[_sellerCode].push(_productSN);
-        productsForSale[_productSN] = _sellerCode;
-
-    }
-
     function sellerSellProduct(bytes32 _productSN, bytes32 _consumerCode) public{   
         bytes32 pStatus;
         uint256 i;
@@ -78,8 +67,6 @@ contract product {
 
 
     }
-
-   
   
 
     //Verify
