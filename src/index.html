@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration and Login</title>
     <style>
         body {
@@ -16,10 +18,9 @@
     </style>
 </head>
 <body>
+    <button id="consumerButton">Continue as Consumer</button>
+
     <h1>User Registration and Login</h1>
-    
-    <!-- Consumer button to redirect to page1 -->
-    <button id="consumerButton">continue as a Consumer</button>
     
     <h2>Select User Type:</h2>
     <form id="userTypeForm">
@@ -65,12 +66,9 @@
         const loginForm = document.getElementById("loginForm");
         const message = document.getElementById("message");
 
-        const users = [
-            { type: "manufacturer", username: "apple", password: "apple1" },
-            { type: "seller", username: "seller1", password: "seller1" }
-        ];
+        // Retrieve users from local storage or use an empty array
+        let users = JSON.parse(localStorage.getItem("users")) || [];
 
-        // Redirect to page1 when the "Consumer" button is clicked
         consumerButton.addEventListener("click", function() {
             window.location.href = "consumer.html";
         });
@@ -80,16 +78,18 @@
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            if (manufacturerCheckbox.checked) {
-                // Handle manufacturer registration
-                message.textContent = "Manufacturer registration successful!";
-                // Redirect to the manufacturer's page (page2.html)
-                window.location.href = "manufacturer.html";
-            } else if (sellerCheckbox.checked) {
-                // Handle seller registration
-                message.textContent = "Seller registration successful!";
-                // Redirect to the seller's page (page3.html)
-                window.location.href = "supplier.html";
+            if (manufacturerCheckbox.checked || sellerCheckbox.checked) {
+                const userType = manufacturerCheckbox.checked ? "manufacturer" : "seller";
+
+                const existingUser = users.find(u => u.type === userType && u.username === username);
+
+                if (existingUser) {
+                    message.textContent = "Username already exists. Choose a different one.";
+                } else {
+                    users.push({ type: userType, username, password });
+                    localStorage.setItem("users", JSON.stringify(users));
+                    message.textContent = `${userType} registration successful!`;
+                }
             } else {
                 message.textContent = "Please select a user type (manufacturer or seller).";
             }
@@ -99,28 +99,25 @@
             event.preventDefault();
             const username = document.getElementById("loginUsername").value;
             const password = document.getElementById("loginPassword").value;
+
             if (manufacturerCheckbox.checked || sellerCheckbox.checked) {
-          
-            const selectedType = manufacturerCheckbox.checked ? "manufacturer" : "seller";
+                const userType = manufacturerCheckbox.checked ? "manufacturer" : "seller";
 
-            const user = users.find(u => u.type === selectedType && u.username === username && u.password === password);
+                const user = users.find(u => u.type === userType && u.username === username && u.password === password);
 
-            if (user) {
-                // Successful login
-                if (selectedType === "manufacturer") {
-                    // Redirect to the manufacturer's page (page2.html)
-                    window.location.href = "manufacturer.html";
+                if (user) {
+                    message.textContent = "Login successful!";
+                    if (userType === "manufacturer") {
+                        window.location.href = "manufacturer.html";
+                    } else {
+                        window.location.href = "seller.html";
+                    }
                 } else {
-                    // Redirect to the seller's page (page3.html)
-                    window.location.href = "supplier.html";
+                    message.textContent = "Invalid username or password.";
                 }
             } else {
-                message.textContent = "Invalid username or password.";
+                message.textContent = "Please select a user type (manufacturer or seller).";
             }
-        }
-        else{
-            message.textContent = "Please select a user type manufacturer or seller.";
-        }
         });
     </script>
 </body>
