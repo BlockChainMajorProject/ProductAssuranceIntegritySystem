@@ -79,4 +79,28 @@ contract product {
             return false;
         }
     }
+
+    // Product registration
+     function IsProductRegistered(bytes32 _productSN) public view returns(bool){
+       bytes32 pStatus;
+        uint256 i;
+        uint256 j=0;
+
+        if(productCount>0) {
+            for(i=0;i<productCount;i++) {
+                if(productItems[i].productSN == _productSN) {
+                    j=i;
+                }
+            }
+        }
+
+        pStatus = productItems[j].productStatus;
+        if(pStatus == "Available") {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
